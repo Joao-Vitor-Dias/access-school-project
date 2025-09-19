@@ -4,6 +4,7 @@ package com.accesses.administrative_system.controller;
 import com.accesses.administrative_system.dto.student.StudentRequestDTO;
 import com.accesses.administrative_system.entity.Student;
 import com.accesses.administrative_system.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createStudent(@RequestBody StudentRequestDTO dto){
+    public ResponseEntity<String> createStudent(@Valid @RequestBody StudentRequestDTO dto){
 
         return studentService.createStudent(dto);
 

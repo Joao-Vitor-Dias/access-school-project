@@ -2,9 +2,7 @@ package com.accesses.administrative_system.entity;
 
 import com.accesses.administrative_system.util.CalculateAge;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 

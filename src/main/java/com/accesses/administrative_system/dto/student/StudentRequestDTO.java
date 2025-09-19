@@ -1,9 +1,6 @@
 package com.accesses.administrative_system.dto.student;
 
-import jakarta.validation.constraints.NotNull;
-import org.springframework.cglib.core.Local;
-
-import java.time.LocalDate;
+import jakarta.validation.constraints.*;
 
 public record StudentRequestDTO(
 
@@ -16,6 +13,9 @@ public record StudentRequestDTO(
     @NotNull(message = "O dia de nascimento nao pode ser nulo")
     String birthDay,
 
+    // (19) 99764-1308
+    @Size(max = 15)
+    @Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$", message = "Telefone deve ter o formato (XX) XXXXX-XXXX")
     @NotNull(message = "O telefone nao pode ser nulo")
     String telephone,
 
