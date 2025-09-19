@@ -1,6 +1,7 @@
 package com.accesses.administrative_system.controller;
 
 
+import com.accesses.administrative_system.dto.student.StudentRequestDTO;
 import com.accesses.administrative_system.entity.Student;
 import com.accesses.administrative_system.service.StudentService;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,9 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createStudent(@RequestBody Student student){
+    public ResponseEntity<String> createStudent(@RequestBody StudentRequestDTO dto){
 
-        return studentService.createStudent(student);
+        return studentService.createStudent(dto);
 
     }
 

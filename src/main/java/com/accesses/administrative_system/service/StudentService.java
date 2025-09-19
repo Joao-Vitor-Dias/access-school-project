@@ -1,8 +1,10 @@
 package com.accesses.administrative_system.service;
 
 
+import com.accesses.administrative_system.dto.student.StudentRequestDTO;
 import com.accesses.administrative_system.entity.Student;
 import com.accesses.administrative_system.repository.StudentRepository;
+import com.accesses.administrative_system.util.DayFormatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,16 @@ public class StudentService {
 
     }
 
-    public ResponseEntity<String> createStudent(Student student){
+    public ResponseEntity<String> createStudent(StudentRequestDTO dto){
+
+        Student student = new Student(dto.firstName(),
+                dto.secondName(),
+                DayFormatter.formatDay(dto.birthDay()),
+                dto.telephone(),
+                DayFormatter.formatDay(dto.enrollDay()),
+                dto.isDependent(),
+                dto.parentName(),
+                dto.parentPhone());
 
         studentRepository.save(student);
         return ResponseEntity.status(HttpStatus.CREATED)
