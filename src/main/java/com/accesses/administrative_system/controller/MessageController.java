@@ -2,20 +2,57 @@ package com.accesses.administrative_system.controller;
 
 import com.accesses.administrative_system.message_api.Message;
 import com.accesses.administrative_system.message_api.MessageRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/message")
 public class MessageController {
 
-    @PostMapping("/send")
-    public void sendMessage(@RequestBody MessageRequest messageRequest) throws JsonProcessingException {
+    @GetMapping("/start")
+    public void startWhatsapp(){
 
-        Message.sendMenssage(messageRequest);
+        Message.startWhatsapp();
+
+    }
+
+    @GetMapping("/qr")
+    public ResponseEntity<byte[]> getQrCode() throws IOException {
+
+        byte [] qrCodeImage = Message.getQrCode();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
+                .body(qrCodeImage);
+
+    }
+
+    @GetMapping("/print")
+    public ResponseEntity<byte[]> getPrint() throws IOException {
+
+        byte [] image = Message.getPrint();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
+                .body(image);
+
+    }
+
+    @PostMapping("/send")
+    public void sendMessage(@RequestBody MessageRequest messageRequest) {
+
+        Message.sendMessage(messageRequest);
+
+    }
+
+    @GetMapping("/quit")
+    public void quitWhatsapp(){
+
+        Message.quitWhatsapp();
 
     }
 

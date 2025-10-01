@@ -6,7 +6,7 @@ public abstract class TelephoneFormatter {
 
         String digitsOnly = telephone.replaceAll("[^0-9]", "");
 
-        return "55" + digitsOnly + "@c.us";
+        return "55" + digitsOnly;
 
     }
 
