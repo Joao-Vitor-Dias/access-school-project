@@ -5,13 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageRequest {
 
-    private Long studentId;
+    private List<Long> studentsId;
     private String message;
+    private boolean isDefaultMessage;
 
 }

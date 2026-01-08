@@ -43,7 +43,7 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public void sendMessage(@RequestBody MessageRequest messageRequest) {
+    public void sendMessage(@RequestBody MessageRequest messageRequest) throws InterruptedException {
 
         Message.sendMessage(messageRequest);
 
