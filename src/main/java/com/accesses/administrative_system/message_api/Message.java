@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
-import java.util.List;
+import java.util.*;
 import java.util.NoSuchElementException;
 
 @Component
@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
 @Setter
 public class Message {
 
+    private static List<String> historyNumber = new ArrayList<>();
     private static StudentService studentService;
     private static WebDriver driver;
     private static QrImageTreatment qrImageTreatment;
@@ -120,6 +121,8 @@ public class Message {
 
             Thread.sleep(100);
 
+            historyNumber.add(student.getTelephone());
+
             /// (19) 97129-2054  (16) 98130-8915
 
 
@@ -128,10 +131,52 @@ public class Message {
 
     }
 
+    public static void sendGenericMessageWay(GenericMessageRequest messageRequest) throws InterruptedException {
+
+        if (messageRequest.message() == null){
+            throw new RuntimeException("Message can`t be null");
+        }
+
+        String textInputPath = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[3]/div[1]/p";
+        String sendButton = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[4]/div/span/div/div/div[1]/div[1]/span";
+
+        List<String> studentsNumbers = Arrays.stream(messageRequest.numbers().split(",")).toList();
+
+        for (String number : studentsNumbers){
+
+            driver.get("https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(number));
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(textInputPath)));
+
+            WebElement textInput = driver.findElement(By.xpath(textInputPath));
+
+            textInput.sendKeys(messageRequest.message());
+
+            Thread.sleep(2000);
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(sendButton)));
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(sendButton)));
+
+            driver.findElement(By.xpath(sendButton)).click();
+
+            Thread.sleep(2000);
+
+            historyNumber.add(number);
+            /// (19) 97129-2054  (16) 98130-8915
+
+        }
+
+
+    }
+
+
+
     public static void quitWhatsapp(){
         driver.quit();
     }
-    
+
     private static Student getStudentFunction(Long studentId){
 
 
@@ -144,6 +189,10 @@ public class Message {
 
         return "Bom dia !!! " + student.getFirstName() + " tudo bem? ";
 
+    }
+
+    public static List<String> getHistoryNumber() {
+        return Collections.unmodifiableList(historyNumber);
     }
 
 }

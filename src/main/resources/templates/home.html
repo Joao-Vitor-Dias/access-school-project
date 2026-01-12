@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Envio de Mensagens</title>
+
+    <link rel="stylesheet" th:href="@{/css/mensagens.css}">
+    <script defer th:src="@{/js/mensagens.js}"></script>
+</head>
+
+<body>
+
+    <!-- HISTÓRICO -->
+    <div class="historico">
+        <h2>Histórico</h2>
+        <ul>
+            <li th:each="item : ${historico}"
+                th:text="${item}">
+                Histórico exemplo
+            </li>
+        </ul>
+    </div>
+
+    <!-- ÁREA DO FORM -->
+    <div class="form-area">
+
+        <!-- ÍCONE -->
+        <div class="icone-menu" onclick="toggleMenu()">
+            ☰
+        </div>
+
+        <!-- MENU FLUTUANTE -->
+        <div id="menuFlutuante" class="menu">
+            <ul>
+                <li onclick="start()">Start</li>
+                <li onclick="abrirConnect()">Connect</li>
+                <li onclick="fecharConnect()">Disconnect</li>
+            </ul>
+        </div>
+
+        <!-- DIALOG / MODAL -->
+        <div id="connectDialog" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="fecharDialog()">&times;</span>
+
+                <h3>Conectar</h3>
+
+                <img id="connectImage" alt="Imagem de conexão" />
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post" action="@{/send}">
+            <input
+                    name="numbers"
+                    placeholder="Número de telefone"
+                    required
+            />
+
+            <textarea
+                    name="message"
+                    placeholder="Digite a mensagem"
+                    required
+            ></textarea>
+
+            <button type="submit">Enviar</button>
+        </form>
+
+    </div>
+
+</body>
+</html>
