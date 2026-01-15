@@ -25,11 +25,13 @@ public class ThymleafMessageController {
     }
 
     @Async
-    public void startAsync(){
+    public String startAsync(){
         try {
             Message.startWhatsapp();
         }catch (Exception e){
             System.out.println("Erro ao tentar iniciar o whatsapp");
+        }finally {
+            return "home";
         }
     }
 
@@ -57,7 +59,7 @@ public class ThymleafMessageController {
 
     @PostMapping("/send")
     public String sendMessage(@ModelAttribute GenericMessageRequest messageRequest, Model model) throws InterruptedException {
-
+        System.out.println("Campos do front com numero: " + messageRequest);
         Message.sendGenericMessageWay(messageRequest);
         model.addAttribute("historico", Message.getHistoryNumber());
         return "home";

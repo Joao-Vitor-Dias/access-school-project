@@ -19,8 +19,10 @@ function fecharDialog() {
 
 function fecharConnect(){
     window.location.href = "/quit";
+    return "/home";
 }
 
 function start() {
     window.location.href = "/start";
+    return "/home";
 }

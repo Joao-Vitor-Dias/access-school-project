@@ -107,7 +107,7 @@ public class Message {
 
             driver.get("https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(student.getTelephone()));
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(textInputPath)));
 
@@ -123,8 +123,6 @@ public class Message {
 
             historyNumber.add(student.getTelephone());
 
-            /// (19) 97129-2054  (16) 98130-8915
-
 
         }
         
@@ -137,26 +135,31 @@ public class Message {
             throw new RuntimeException("Message can`t be null");
         }
 
-        String textInputPath = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[3]/div[1]/p";
-        String sendButton = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[4]/div/span/div/div/div[1]/div[1]/span";
+        // //*[@id="main"]/footer/div[1]/div/span/div/div/div/div[3]/div[1]/p
+        String textInputPath = "//footer//div[@role='textbox' and @contenteditable='true']";
 
-        List<String> studentsNumbers = Arrays.stream(messageRequest.numbers().split(",")).toList();
+        // //*[@id="main"]/footer/div[1]/div/span/div/div/div/div[4]/div/span/button
+        String sendButton = "(//*[@id=\"main\"]/footer//button)[last()]";
+
+        List<String> studentsNumbers = Arrays.stream(messageRequest.numbers().trim().split(",")).toList();
 
         for (String number : studentsNumbers){
 
+            if(number.length() > 11){
+                throw new RuntimeException("Numero invalido");
+            }
+
+            System.out.println("Url da service:  https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(number));
             driver.get("https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(number));
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(textInputPath)));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(textInputPath)));
 
             WebElement textInput = driver.findElement(By.xpath(textInputPath));
 
             textInput.sendKeys(messageRequest.message());
 
-            Thread.sleep(2000);
-
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(sendButton)));
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(sendButton)));
 
             driver.findElement(By.xpath(sendButton)).click();
@@ -164,7 +167,6 @@ public class Message {
             Thread.sleep(2000);
 
             historyNumber.add(number);
-            /// (19) 97129-2054  (16) 98130-8915
 
         }
 
