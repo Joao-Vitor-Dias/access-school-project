@@ -1,8 +1,11 @@
 package com.accesses.administrative_system.util;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Component
 public abstract class DayFormatter {
 
     public static LocalDate formatDay(String day){

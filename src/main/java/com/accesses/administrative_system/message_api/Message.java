@@ -1,6 +1,7 @@
 package com.accesses.administrative_system.message_api;
 
 import com.accesses.administrative_system.entity.Student;
+import com.accesses.administrative_system.message_api.utils.QrImageTreatment;
 import com.accesses.administrative_system.service.StudentService;
 import com.accesses.administrative_system.util.TelephoneFormatter;
 import lombok.Getter;
@@ -19,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.NoSuchElementException;
 
@@ -27,6 +30,7 @@ import java.util.NoSuchElementException;
 @Setter
 public class Message {
 
+    @Getter
     private static List<String> historyNumber = new ArrayList<>();
     private static StudentService studentService;
     private static WebDriver driver;
@@ -89,20 +93,20 @@ public class Message {
 
     }
 
-    public static void sendMessage(MessageRequest messageRequest) throws InterruptedException {
+    public static void sendMessage(MessageStudentRequest messageStudentRequest) throws InterruptedException {
 
         String textInputPath = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[3]/div[1]/p";
         String sendButton = "//*[@id=\"main\"]/footer/div[1]/div/span/div/div[2]/div/div[4]/div/span/div/div/div[1]/div[1]/span";
         
-        List<Long> studentsId = messageRequest.getStudentsId();
+        List<Long> studentsId = messageStudentRequest.getStudentsId();
 
         for (Long studentId : studentsId){
 
             Student student = getStudentFunction(studentId);
 
-            if (messageRequest.isDefaultMessage()){
+            if (messageStudentRequest.isDefaultMessage()){
                 String message = getMessageFunction(student);
-                messageRequest.setMessage(message);
+                messageStudentRequest.setMessage(message);
             }
 
             driver.get("https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(student.getTelephone()));
@@ -113,7 +117,7 @@ public class Message {
 
             WebElement textInput = driver.findElement(By.xpath(textInputPath));
 
-            textInput.sendKeys(messageRequest.getMessage());
+            textInput.sendKeys(messageStudentRequest.getMessage());
 
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(sendButton)));
 
@@ -121,11 +125,9 @@ public class Message {
 
             Thread.sleep(100);
 
-            historyNumber.add(student.getTelephone());
-
+            historyNumber.add("Telefone: " + student.getTelephone());
 
         }
-        
 
     }
 
@@ -166,7 +168,7 @@ public class Message {
 
             Thread.sleep(2000);
 
-            historyNumber.add(number);
+            historyNumber.add("Telefone: " + number + " " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 
         }
 
@@ -191,10 +193,6 @@ public class Message {
 
         return "Bom dia !!! " + student.getFirstName() + " tudo bem? ";
 
-    }
-
-    public static List<String> getHistoryNumber() {
-        return Collections.unmodifiableList(historyNumber);
     }
 
 }

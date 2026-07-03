@@ -6,7 +6,6 @@ function toggleMenu() {
 function abrirConnect() {
     const img = document.getElementById("connectImage");
 
-    // endpoint que retorna a imagem
     img.src = "/qr";
 
     document.getElementById("connectDialog").style.display = "block";
@@ -18,11 +17,27 @@ function fecharDialog() {
 }
 
 function fecharConnect(){
+    updateStatusButton('Disconnected');
     window.location.href = "/quit";
-    return "/home";
 }
 
 function start() {
+    updateStatusButton('Connected');
     window.location.href = "/start";
-    return "/home";
+}
+
+function tirarPrint(){
+    window.location.href = "/print"
+}
+
+function updateStatusButton(status) {
+    const button = document.getElementById('statusButton');
+
+    if (status === 'Connected') {
+        button.classList.add('connected');
+        button.classList.remove('disconnected');
+    } else {
+        button.classList.add('disconnected');
+        button.classList.remove('connected');
+    }
 }

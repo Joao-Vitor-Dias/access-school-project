@@ -6,6 +6,18 @@
 
     <link rel="stylesheet" th:href="@{/css/mensagens.css}">
     <script defer th:src="@{/js/mensagens.js}"></script>
+    <style>
+        button.connected {
+            background-color: green;
+            color: white;
+        }
+
+        button.disconnected {
+            background-color: red;
+            color: white;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -25,8 +37,14 @@
     <div class="form-area">
 
         <!-- ÍCONE -->
-        <div class="icone-menu" onclick="toggleMenu()">
+        <div class="icone-menu" onclick="toggleMenu()" style="display: flex">
             ☰
+            <div style="margin-left: auto;display: flex; align-content: center; align-items: center">
+                <button id="statusButton" th:class="${isConnected} ? 'connected' : 'disconnected' " style="border-radius: 10px; padding-right: 10px; width: 20px">
+                </button>
+                <span style="height: 100%">Connection</span>
+
+            </div>
         </div>
 
         <!-- MENU FLUTUANTE -->
@@ -34,6 +52,7 @@
             <ul>
                 <li onclick="start()">Start</li>
                 <li onclick="abrirConnect()">Connect</li>
+                <li onclick="tirarPrint()">Take Screenshot</li>
                 <li onclick="fecharConnect()">Disconnect</li>
             </ul>
         </div>
@@ -53,7 +72,7 @@
         <form method="post" th:action="@{/send}">
             <input
                     name="numbers"
-                    placeholder="Número de telefone"
+                    placeholder="Número de telefone. ex: 19222221111,19555553333, ..."
                     required
             />
 

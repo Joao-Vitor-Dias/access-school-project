@@ -83,6 +83,15 @@ button {
     cursor: pointer;
 }
 
+button.connected {
+    background-color: green;
+    color: white;
+}
+
+button.disconnected {
+    background-color: red;
+    color: white;
+}
 
 .modal {
     display: none;

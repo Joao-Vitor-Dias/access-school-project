@@ -1,10 +1,9 @@
-package com.accesses.administrative_system.message_api;
+package com.accesses.administrative_system.message_api.utils;
 
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

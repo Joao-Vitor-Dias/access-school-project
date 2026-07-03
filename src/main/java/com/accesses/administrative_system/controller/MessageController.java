@@ -1,7 +1,7 @@
 package com.accesses.administrative_system.controller;
 
 import com.accesses.administrative_system.message_api.Message;
-import com.accesses.administrative_system.message_api.MessageRequest;
+import com.accesses.administrative_system.message_api.MessageStudentRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +43,9 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public void sendMessage(@RequestBody MessageRequest messageRequest) throws InterruptedException {
+    public void sendMessage(@RequestBody MessageStudentRequest messageStudentRequest) throws InterruptedException {
 
-        Message.sendMessage(messageRequest);
+        Message.sendMessage(messageStudentRequest);
 
     }
 

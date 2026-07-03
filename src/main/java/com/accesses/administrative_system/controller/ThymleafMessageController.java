@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -18,20 +19,19 @@ import java.io.IOException;
 public class ThymleafMessageController {
 
     @GetMapping("/start")
-    public String startWhatsapp(){
-
+    public String startWhatsapp(RedirectAttributes redirectAttributes){
         startAsync();
-        return "home";
+        boolean isConnected = true;
+        redirectAttributes.addFlashAttribute("isConnected", isConnected);
+        return "redirect:/home";
     }
 
-    @Async
-    public String startAsync(){
+
+    public void startAsync() {
         try {
             Message.startWhatsapp();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Erro ao tentar iniciar o whatsapp");
-        }finally {
-            return "home";
         }
     }
 
@@ -58,16 +58,17 @@ public class ThymleafMessageController {
     }
 
     @PostMapping("/send")
-    public String sendMessage(@ModelAttribute GenericMessageRequest messageRequest, Model model) throws InterruptedException {
+    public String sendMessage(@ModelAttribute GenericMessageRequest messageRequest,
+                              RedirectAttributes redirectAttributes) throws InterruptedException {
         System.out.println("Campos do front com numero: " + messageRequest);
         Message.sendGenericMessageWay(messageRequest);
-        model.addAttribute("historico", Message.getHistoryNumber());
-        return "home";
+        redirectAttributes.addFlashAttribute("historico", Message.getHistoryNumber());
+        return "redirect:/home";
 
     }
 
     @GetMapping("/quit")
-    public String quitWhatsapp(){
+    public String quitWhatsapp(Model model){
 
         try {
             Message.quitWhatsapp();
@@ -75,7 +76,10 @@ public class ThymleafMessageController {
             System.out.println("Erro ao tentar encerrar o whatsapp");
         }
 
-        return "home";
+        boolean isConnected = false;
+        model.addAttribute("isConnected", isConnected);
+
+        return "redirect:/home";
     }
 
 }

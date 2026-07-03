@@ -1,8 +1,11 @@
 package com.accesses.administrative_system.util;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.Period;
 
+@Component
 public abstract class CalculateAge {
 
     public static int calculateAge(LocalDate birthDay){

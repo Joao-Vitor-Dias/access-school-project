@@ -1,5 +1,8 @@
 package com.accesses.administrative_system.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public abstract class TelephoneFormatter {
 
     public static String telephoneFormatter(String telephone){

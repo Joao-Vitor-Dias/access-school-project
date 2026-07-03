@@ -9,21 +9,8 @@ import java.util.List;
 @Controller
 public class ThymleafController {
 
-
     @GetMapping("/home")
-    public String home(Model model){
-        List<String> historico = List.of(
-                "Mensagem enviada para 11999999999",
-                "Mensagem enviada para 11888888888",
-                "Mensagem enviada para 11999999999",
-                "Mensagem enviada para 11888888888",
-                "Mensagem enviada para 11999999999",
-                "Mensagem enviada para 11888888888",
-                "Mensagem enviada para 11999999999",
-                "Mensagem enviada para 11888888888"
-        );
-
-        model.addAttribute("historico", historico);
+    public String home(){
         return "home";
     }
 
