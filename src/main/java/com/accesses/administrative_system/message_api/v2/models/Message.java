@@ -1,10 +1,12 @@
-package com.accesses.administrative_system.message_api.v2;
+package com.accesses.administrative_system.message_api.v2.models;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class Message {
 
 

@@ -1,12 +1,11 @@
 package com.accesses.administrative_system.controller.v2;
 
-import com.accesses.administrative_system.message_api.v2.Message;
+import com.accesses.administrative_system.message_api.v2.models.Message;
 import com.accesses.administrative_system.message_api.v2.MessageServiceV2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 @RestController

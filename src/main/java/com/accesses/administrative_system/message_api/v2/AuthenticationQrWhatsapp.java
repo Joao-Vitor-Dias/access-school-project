@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @Log4j2
@@ -35,6 +36,10 @@ public class AuthenticationQrWhatsapp implements GetAuthentication{
         String pathImgQr = SeleniumConstants.QR_CODE_PATH;
 
         WebDriver webDriver = seleniumManager.getWebDriver();
+
+        if (Objects.isNull(webDriver)){
+            throw new RuntimeException("Selenium driver is not initializer");
+        }
 
         webDriver.get("https://web.whatsapp.com");
 

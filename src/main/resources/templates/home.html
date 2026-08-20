@@ -1,91 +1,247 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Envio de Mensagens</title>
 
-    <link rel="stylesheet" th:href="@{/css/mensagens.css}">
-    <script defer th:src="@{/js/mensagens.js}"></script>
-    <style>
-        button.connected {
-            background-color: green;
-            color: white;
-        }
+    <title>WhatsApp API</title>
 
-        button.disconnected {
-            background-color: red;
-            color: white;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    </style>
+    <link rel="stylesheet"
+          th:href="@{/css/home.css}">
+
 </head>
 
 <body>
 
-    <!-- HISTÓRICO -->
-    <div class="historico">
-        <h2>Histórico</h2>
-        <ul>
-            <li th:each="item : ${historico}"
-                th:text="${item}">
-                Histórico exemplo
-            </li>
-        </ul>
-    </div>
+<div class="container py-4">
 
-    <!-- ÁREA DO FORM -->
-    <div class="form-area">
+    <h2 class="mb-4">
+        WhatsApp Selenium API
+    </h2>
 
-        <!-- ÍCONE -->
-        <div class="icone-menu" onclick="toggleMenu()" style="display: flex">
-            ☰
-            <div style="margin-left: auto;display: flex; align-content: center; align-items: center">
-                <button id="statusButton" th:class="${isConnected} ? 'connected' : 'disconnected' " style="border-radius: 10px; padding-right: 10px; width: 20px">
-                </button>
-                <span style="height: 100%">Connection</span>
+    <div class="row">
+
+        <!-- STATUS -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    Status
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+
+                        <span id="driverStatus"
+                              class="badge bg-danger">
+
+                            Selenium OFF
+
+                        </span>
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <span id="whatsappStatus"
+                              class="badge bg-danger">
+
+                            WhatsApp OFF
+
+                        </span>
+
+                    </div>
+
+                    <div class="d-grid gap-2">
+
+                        <button
+                                id="btnConnect"
+                                class="btn btn-success">
+
+                            Conectar
+
+                        </button>
+
+                        <button
+                                id="btnDisconnect"
+                                class="btn btn-danger">
+
+                            Desconectar
+
+                        </button>
+
+                        <button
+                                id="btnPopup"
+                                class="btn btn-warning">
+
+                            Fechar Popup
+
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
+
         </div>
 
-        <!-- MENU FLUTUANTE -->
-        <div id="menuFlutuante" class="menu">
-            <ul>
-                <li onclick="start()">Start</li>
-                <li onclick="abrirConnect()">Connect</li>
-                <li onclick="tirarPrint()">Take Screenshot</li>
-                <li onclick="fecharConnect()">Disconnect</li>
-            </ul>
-        </div>
+        <!-- QR -->
 
-        <!-- DIALOG / MODAL -->
-        <div id="connectDialog" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="fecharDialog()">&times;</span>
+        <div class="col-md-8">
 
-                <h3>Conectar</h3>
+            <div class="card shadow-sm">
 
-                <img id="connectImage" alt="Imagem de conexão" />
+                <div class="card-header">
+
+                    QR Code
+
+                </div>
+
+                <div class="card-body text-center">
+
+                    <img
+
+                            id="qrImage"
+
+                            class="img-fluid"
+
+                            style="max-height:350px"
+
+                            src="/v2/message/qr"
+
+                            alt="QR Code"
+
+                    >
+
+                    <br><br>
+
+                    <button
+
+                            class="btn btn-outline-primary"
+
+                            id="btnRefreshQr">
+
+                        Atualizar QR
+
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
-
-        <!-- FORM -->
-        <form method="post" th:action="@{/send}">
-            <input
-                    name="numbers"
-                    placeholder="Número de telefone. ex: 19222221111,19555553333, ..."
-                    required
-            />
-
-            <textarea
-                    name="message"
-                    placeholder="Digite a mensagem"
-                    required
-            ></textarea>
-
-            <button type="submit">Enviar</button>
-        </form>
 
     </div>
+
+    <br>
+
+    <!-- ENVIO -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            Enviar Mensagem
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <label>
+
+                    Telefone(s)
+
+                </label>
+
+                <input
+
+                        id="phone"
+
+                        class="form-control"
+
+                        placeholder="5511999999999,5511888888888"
+
+                >
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>
+
+                    Mensagem
+
+                </label>
+
+                <textarea
+
+                        id="message"
+
+                        rows="5"
+
+                        class="form-control">
+
+                </textarea>
+
+            </div>
+
+            <button
+
+                    id="btnSend"
+
+                    class="btn btn-primary">
+
+                Enviar
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <!-- LOG -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            Eventos
+
+        </div>
+
+        <div class="card-body">
+
+            <div
+
+                    id="log"
+
+                    class="log-box">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/home.js}"></script>
 
 </body>
+
 </html>
