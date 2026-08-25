@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("v2/message")
+@CrossOrigin(origins = "http://localhost:4200")
 public class MessageControllerV2 {
 
     private final MessageServiceV2 messageServiceV2;
