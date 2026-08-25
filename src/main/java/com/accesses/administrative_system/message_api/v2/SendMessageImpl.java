@@ -80,15 +80,6 @@ public class SendMessageImpl implements SendMessage{
 
             String result = this.sendToWhatsapp(message.getPrincipal(), number);
 
-            emitAlert.execute(Alert.builder()
-                    .message("Messagem enviada com sucesso")
-                    .alertType(AlertType.MESSAGE_SEND_SUCCESSFUL)
-                    .data(Message.builder()
-                            .phoneNumber(number)
-                            .principal(message.getPrincipal())
-                            .build())
-                    .build());
-
             resultList.add(result);
 
             try {
@@ -135,7 +126,17 @@ public class SendMessageImpl implements SendMessage{
 
             log.info("Text input foi encontrado");
 
-            textInput.sendKeys(message);
+            String[] lines = message.split("\n");
+
+            for (int i = 0; i < lines.length; i++) {
+
+                textInput.sendKeys(lines[i]);
+
+                if (i < lines.length - 1) {
+                    textInput.sendKeys(Keys.SHIFT, Keys.ENTER);
+                }
+            }
+
             log.info("Mensagem escrita no text input");
 
             textInput.sendKeys(Keys.ENTER);
@@ -157,6 +158,15 @@ public class SendMessageImpl implements SendMessage{
 
             return "Send message ERROR";
         }
+
+        emitAlert.execute(Alert.builder()
+                .message("Messagem enviada com sucesso")
+                .alertType(AlertType.MESSAGE_SEND_SUCCESSFUL)
+                .data(Message.builder()
+                        .phoneNumber(phone)
+                        .principal(message)
+                        .build())
+                .build());
 
         return "Send message SUCCESS";
     }
