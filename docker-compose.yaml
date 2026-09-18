@@ -1,0 +1,17 @@
+services:
+
+  backend:
+    image: access_project_back:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - selenium
+    volumes:
+      - backend-images:/app/images
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    shm_size: 2gb
+
+volumes:
+  backend-images:
