@@ -1,6 +1,8 @@
 package com.accesses.administrative_system.message_api;
 
 import com.accesses.administrative_system.entity.Student;
+import com.accesses.administrative_system.exceptions.InvalidMessageException;
+import com.accesses.administrative_system.exceptions.InvalidPhoneNumberException;
 import com.accesses.administrative_system.message_api.utils.QrImageTreatment;
 import com.accesses.administrative_system.service.StudentService;
 import com.accesses.administrative_system.util.TelephoneFormatter;
@@ -28,6 +30,7 @@ import java.util.NoSuchElementException;
 @Component
 @Getter
 @Setter
+@Deprecated
 public class Message {
 
     @Getter
@@ -134,7 +137,7 @@ public class Message {
     public static void sendGenericMessageWay(GenericMessageRequest messageRequest) throws InterruptedException {
 
         if (messageRequest.message() == null){
-            throw new RuntimeException("Message can`t be null");
+            throw new InvalidMessageException("Message can`t be null");
         }
 
         // //*[@id="main"]/footer/div[1]/div/span/div/div/div/div[3]/div[1]/p
@@ -148,7 +151,7 @@ public class Message {
         for (String number : studentsNumbers){
 
             if(number.length() > 11){
-                throw new RuntimeException("Numero invalido");
+                throw new InvalidPhoneNumberException("Numero invalido");
             }
 
             System.out.println("Url da service:  https://web.whatsapp.com/send?phone=" + TelephoneFormatter.telephoneFormatter(number));

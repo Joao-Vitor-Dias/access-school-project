@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated
 public class MessageStudentRequest {
 
     private List<Long> studentsId;

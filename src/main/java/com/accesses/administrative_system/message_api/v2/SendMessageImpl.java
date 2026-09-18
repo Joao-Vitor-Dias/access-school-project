@@ -2,6 +2,9 @@ package com.accesses.administrative_system.message_api.v2;
 
 import com.accesses.administrative_system.entity.Alert;
 import com.accesses.administrative_system.entity.enums.AlertType;
+import com.accesses.administrative_system.exceptions.InvalidMessageException;
+import com.accesses.administrative_system.exceptions.InvalidPhoneNumberException;
+import com.accesses.administrative_system.exceptions.SeleniumNotInitializedException;
 import com.accesses.administrative_system.message_api.config.SeleniumManager;
 import com.accesses.administrative_system.message_api.v2.models.Message;
 import com.accesses.administrative_system.usecases.EmitAlert;
@@ -37,11 +40,11 @@ public class SendMessageImpl implements SendMessage{
     public void execute(Message message) {
 
         if (message.getPrincipal() == null){
-            throw new RuntimeException("Message can`t be null");
+            throw new InvalidMessageException("Message can`t be null");
         }
 
         if (message.getPhoneNumber() == null){
-            throw new RuntimeException("Phone numbers can`t be null");
+            throw new InvalidPhoneNumberException("Phone numbers can`t be null");
         }
 
         List<String> studentsNumbers = new ArrayList<>();
@@ -66,7 +69,7 @@ public class SendMessageImpl implements SendMessage{
         for (String number : studentsNumbers){
 
             if(number.length() != 11) {
-                throw new RuntimeException("Numero invalido");
+                throw new InvalidPhoneNumberException("Numero invalido");
             }
 
             emitAlert.execute(Alert.builder()
@@ -101,7 +104,7 @@ public class SendMessageImpl implements SendMessage{
         log.info("Pegando o Web driver para usar");
 
         if (Objects.isNull(webDriver)){
-            throw new RuntimeException("Start the browser first ...");
+            throw new SeleniumNotInitializedException("Start the browser first ...");
         }
 
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(20));

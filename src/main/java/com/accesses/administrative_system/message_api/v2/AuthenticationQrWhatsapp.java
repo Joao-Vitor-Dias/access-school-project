@@ -1,5 +1,7 @@
 package com.accesses.administrative_system.message_api.v2;
 
+import com.accesses.administrative_system.exceptions.QrAuthException;
+import com.accesses.administrative_system.exceptions.SeleniumNotInitializedException;
 import com.accesses.administrative_system.message_api.config.SeleniumManager;
 import com.accesses.administrative_system.message_api.v2.constants.SeleniumConstants;
 import lombok.extern.log4j.Log4j2;
@@ -38,7 +40,7 @@ public class AuthenticationQrWhatsapp implements GetAuthentication{
         WebDriver webDriver = seleniumManager.getWebDriver();
 
         if (Objects.isNull(webDriver)){
-            throw new RuntimeException("Selenium driver is not initializer");
+            throw new SeleniumNotInitializedException("Selenium driver is not initializer");
         }
 
         webDriver.get("https://web.whatsapp.com");
@@ -46,6 +48,7 @@ public class AuthenticationQrWhatsapp implements GetAuthentication{
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         //"canvas[aria-label='Scan this QR code to link a device!']"
+        // TRATAR ERRO AQUI
         wait.until(d ->
                 !d.findElements(By.cssSelector("canvas")).isEmpty()
                 ||
@@ -63,7 +66,7 @@ public class AuthenticationQrWhatsapp implements GetAuthentication{
 
             Files.copy(screenshot.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
         }else {
-            throw new RuntimeException("Verify if you is already logged ... ");
+            throw new QrAuthException("Verify if you is already logged ... ");
         }
 
         //return qrImageTreatment.getImageAsBytes(pathImgQr);

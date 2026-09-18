@@ -51,6 +51,15 @@ public class MessageControllerV2 {
 
     }
 
+    @GetMapping("print")
+    public ResponseEntity<byte[]> getPrint() throws IOException {
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(messageServiceV2.getPrint());
+
+    }
+
     @GetMapping("close/popup")
     public void closePopup(){
 

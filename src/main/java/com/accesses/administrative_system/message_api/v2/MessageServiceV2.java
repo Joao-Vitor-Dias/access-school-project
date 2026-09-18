@@ -8,14 +8,17 @@ import com.accesses.administrative_system.message_api.v2.constants.SeleniumConst
 import com.accesses.administrative_system.message_api.v2.models.Message;
 import com.accesses.administrative_system.usecases.EmitAlert;
 import lombok.extern.log4j.Log4j2;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +104,28 @@ public class MessageServiceV2 {
 
     }
 
+    public byte[] getPrint() throws IOException {
+
+        WebDriver webDriver = seleniumManager.getWebDriver();
+
+        String pathImg = "/app/images/print.jpg";
+
+        File screenshot = ((TakesScreenshot) webDriver ).getScreenshotAs(OutputType.FILE);
+
+        Path dest = Paths.get(pathImg);
+
+        Files.copy(screenshot.toPath(),dest, StandardCopyOption.REPLACE_EXISTING);
+
+        return qrImageTreatment.getImageAsBytes(pathImg);
+
+    }
+
     public void closePopUp(){
+
+        emitAlert.execute(Alert.builder()
+                .message("Tentando fechar popup do whatsapp")
+                .alertType(AlertType.TRY_LOGIN_WHATSAPP)
+                .build());
 
         WebDriver webDriver = seleniumManager.getWebDriver();
 
@@ -121,8 +145,16 @@ public class MessageServiceV2 {
 
         if (!popupElements.isEmpty()) {
             popupElements.getFirst().click();
+            emitAlert.execute(Alert.builder()
+                    .message("Popup fechado com sucesso")
+                    .alertType(AlertType.LOGIN_WHATSAPP_SUCCESSFUL)
+                    .build());
             log.info("Popup 'O que há de novo' fechado");
         } else {
+            emitAlert.execute(Alert.builder()
+                    .message("Popup não encontrado")
+                    .alertType(AlertType.LOGIN_WHATSAPP_FAILURE)
+                    .build());
             log.info("Popup não encontrado, seguindo em frente");
         }
     }

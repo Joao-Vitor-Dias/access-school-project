@@ -11,6 +11,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/message")
+@Deprecated
 public class MessageController {
 
     @GetMapping("/start")
