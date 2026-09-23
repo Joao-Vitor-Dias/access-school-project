@@ -48,26 +48,32 @@ public class AuthenticationQrWhatsapp implements GetAuthentication{
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         //"canvas[aria-label='Scan this QR code to link a device!']"
-        // TRATAR ERRO AQUI
-        wait.until(d ->
-                !d.findElements(By.cssSelector("canvas")).isEmpty()
-                ||
-                !d.findElements(By.cssSelector("[data-testid='chat-list']")).isEmpty()
-        );
+        try {
 
-        boolean hasQr = !webDriver.findElements(
-                By.cssSelector("canvas[aria-label='Scan this QR code to link a device!']")
-        ).isEmpty();
+            wait.until(d ->
+                    !d.findElements(By.cssSelector("canvas")).isEmpty()
+                            ||
+                            !d.findElements(By.cssSelector("[data-testid='chat-list']")).isEmpty()
+            );
 
-        if (hasQr) {
-            File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+            boolean hasQr = !webDriver.findElements(
+                    By.cssSelector("canvas[aria-label='Scan this QR code to link a device!']")
+            ).isEmpty();
 
-            Path dest = Paths.get(pathImgQr);
+            if (hasQr) {
+                File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
 
-            Files.copy(screenshot.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
-        }else {
+                Path dest = Paths.get(pathImgQr);
+
+                Files.copy(screenshot.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
+            }else {
+                throw new QrAuthException("Verify if you is already logged ... ");
+            }
+
+        }catch (Exception e){
             throw new QrAuthException("Verify if you is already logged ... ");
         }
+
 
         //return qrImageTreatment.getImageAsBytes(pathImgQr);
 
